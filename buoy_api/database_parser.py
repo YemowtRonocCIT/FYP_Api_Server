@@ -1,8 +1,17 @@
 from buoy_api.message import Message
 
 class DatabaseParser(object):
+    """
+    This class will be used to convert returned data from the Database to 
+    the domain level classes that will be used by the program.
+    """
 
     def convert_to_message(self, row):
+        """
+        Convert a row from a messages response to the Message domain class.
+
+        row: Single row returned from SELECT
+        """
         NODE_ID_INDEX = 1
         BUTTON_PRESSED_INDEX = 2
         TEMPERATURE_INDEX = 3
