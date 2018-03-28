@@ -1,4 +1,5 @@
 from buoy_api.message import Message
+from buoy_api.node import Node
 
 class DatabaseParser(object):
     """
@@ -24,3 +25,17 @@ class DatabaseParser(object):
             row[VIBRATION_SENSED_INDEX], row[NODE_ID_INDEX])
 
         return message
+
+    def convert_to_node(self, row):
+        """
+        Convert a row from a node response to the Node domain class.
+
+        row: Single row returned from SELECT
+        """
+        NODE_ID_INDEX = 0
+        SIGFOX_ID_INDEX = 1
+        ACTIVE_INDEX = 2
+
+        node = Node(row[NODE_ID_INDEX], row[SIGFOX_ID_INDEX], row[ACTIVE_INDEX])
+
+        return node

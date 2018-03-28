@@ -19,7 +19,7 @@ def nodes_page():
     nodes = database.retrieve_all_nodes()
     node_objects = []
     for node in nodes:
-        current_node = Node(node[0], node[1], node[2])
+        current_node = database_parser.convert_to_node(node)
         node_objects.append(current_node)
 
     return jsonify(node_objects)
