@@ -34,14 +34,6 @@ def messages_page():
     
     return jsonify(messages)
 
-MESSAGE_ID_INDEX = 0
-NODE_ID_INDEX = 1
-BUTTON_PRESSED_INDEX = 2
-TEMPERATURE_INDEX = 3
-VIBRATION_INDEX = 4
-TEMPERATURE_SENSED_INDEX = 5
-VIBRATION_SENSED_INDEX = 6
-
 @app.route('/message/<sigfox_id>')
 def messages_by_sigfox_id_page(sigfox_id):
     rows = database.retrieve_messages_by_sigfox_id(sigfox_id)
