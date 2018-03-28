@@ -16,13 +16,13 @@ def index_page():
 
 @app.route('/nodes', methods=['GET'])
 def nodes_page():
-    nodes = database.retrieve_all_nodes()
-    node_objects = []
-    for node in nodes:
-        current_node = database_parser.convert_to_node(node)
-        node_objects.append(current_node)
+    rows = database.retrieve_all_nodes()
+    nodes = []
+    for row in rows:
+        node = database_parser.convert_to_node(row)
+        nodes.append(node)
 
-    return jsonify(node_objects)
+    return jsonify(nodes)
 
 @app.route('/message', methods=['GET'])
 def messages_page():
