@@ -1,4 +1,4 @@
-from scraper.postgres_interface import PostgresInterface
+from buoy_api.postgres_interface import PostgresInterface
 
 class PostgresInteraction(PostgresInterface):
 
@@ -104,6 +104,34 @@ class PostgresInteraction(PostgresInterface):
             return True
         else:
             return False
+
+    def retrieve_all_messages(self):
+        """
+        Retrieves all messages from the database
+        """
+        sql = """SELECT message_id, node_id, button_pressed, temperature, vibration
+        FROM messages;
+        """
+        rows = self.select(sql)
+        return rows
+
+    def retrieve_messages_by_sigfox_id(self, sigfox_id):
+        """
+        Retrieves all messages from the database that are linked to the given
+        sigfox_id
+
+        sigfox_id (str): ID as given by sigfox
+        """
+        sql = """SELECT m.message_id, m.node_id, 
+            m.button_pressed, m.temperature, m.vibration, s.temperature_sensed,
+            s.vibration_sensed
+        FROM messages AS m, node, sensor AS s
+        WHERE m.node_id = node.node_id
+        AND node.node_id = s.node_id
+        AND node.sigfox_id = %s"""
+        data = (sigfox_id, )
+        rows = self.select(sql, data)
+        return rows
 
     def add_sensor_update(self, node_id, temperature_sensed, vibration_sensed):
         """
