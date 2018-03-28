@@ -114,8 +114,12 @@ class PostgresInteraction(PostgresInterface):
         """
         Retrieves all messages from the database
         """
-        sql = """SELECT message_id, node_id, button_pressed, temperature, vibration
-        FROM messages;
+        sql = """SELECT m.message_id, m.node_id, m.button_pressed, 
+            m.temperature, m.vibration, s.temperature_sensed, 
+            s.vibration_sensed
+        FROM messages AS m, node, sensor AS s
+        WHERE m.node_id = node.node_id
+        AND node.node_id = s.node_id;
         """
         rows = self.select(sql)
         return rows
