@@ -12,6 +12,7 @@ database_parser = DatabaseParser()
 
 NODE_SUFFIX = '/node/'
 MESSAGE_SUFFIX = '/message/'
+SIGFOX_ID = '<sigfox_id>/'
 
 @app.route('/', methods=['GET'])
 def index_page():
@@ -37,7 +38,7 @@ def messages_page():
     
     return jsonify(messages)
 
-@app.route(MESSAGE_SUFFIX + '<sigfox_id>/', methods=['GET'])
+@app.route(MESSAGE_SUFFIX + SIGFOX_ID, methods=['GET'])
 def messages_by_sigfox_id_page(sigfox_id):
     rows = database.retrieve_messages_by_sigfox_id(sigfox_id)
     messages = []
