@@ -10,11 +10,11 @@ app = Flask(__name__)
 database = PostgresInteraction(DB_NAME, DB_USER, DB_PASSWORD, HOST)
 database_parser = DatabaseParser()
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index_page():
     return "Hello World"
 
-@app.route('/nodes')
+@app.route('/nodes', methods=['GET'])
 def nodes_page():
     nodes = database.retrieve_all_nodes()
     node_objects = []
@@ -24,7 +24,7 @@ def nodes_page():
 
     return jsonify(node_objects)
 
-@app.route('/message')
+@app.route('/message', methods=['GET'])
 def messages_page():
     rows = database.retrieve_all_messages()
     messages = []
@@ -34,7 +34,7 @@ def messages_page():
     
     return jsonify(messages)
 
-@app.route('/message/<sigfox_id>')
+@app.route('/message/<sigfox_id>', methods=['GET'])
 def messages_by_sigfox_id_page(sigfox_id):
     rows = database.retrieve_messages_by_sigfox_id(sigfox_id)
     messages = []
