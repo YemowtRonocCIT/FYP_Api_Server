@@ -125,7 +125,7 @@ class PostgresInteraction(PostgresInterface):
         rows = self.select(sql)
         return rows
 
-    def retrieve_messages_by_sigfox_id(self, sigfox_id):
+    def retrieve_message_by_sigfox_id(self, sigfox_id):
         """
         Retrieves all messages from the database that are linked to the given
         sigfox_id
