@@ -134,7 +134,7 @@ class PostgresInteraction(PostgresInterface):
         """
         sql = """SELECT m.message_id, m.node_id, 
             m.button_pressed, m.temperature, m.vibration, s.temperature_sensed,
-            s.vibration_sensed
+            s.vibration_sensed, m.time_added
         FROM messages AS m, node, sensor AS s
         WHERE m.node_id = node.node_id
         AND node.node_id = s.node_id
