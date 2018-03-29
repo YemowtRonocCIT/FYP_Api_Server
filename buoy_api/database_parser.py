@@ -20,9 +20,9 @@ class DatabaseParser(object):
         TEMPERATURE_SENSED_INDEX = 5
         VIBRATION_SENSED_INDEX = 6
 
-        message = Message(row[BUTTON_PRESSED_INDEX], row[VIBRATION_INDEX],
-            row[TEMPERATURE_INDEX], row[TEMPERATURE_SENSED_INDEX], 
-            row[VIBRATION_SENSED_INDEX], row[NODE_ID_INDEX])
+        message = Message(row[BUTTON_PRESSED_INDEX], row[TEMPERATURE_SENSED_INDEX],
+            row[VIBRATION_SENSED_INDEX], row[TEMPERATURE_INDEX], 
+            row[VIBRATION_INDEX], row[NODE_ID_INDEX])
 
         return message
 
