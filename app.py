@@ -40,7 +40,7 @@ def messages_page():
 
 @app.route(MESSAGE_SUFFIX + SIGFOX_ID, methods=['GET'])
 def messages_by_sigfox_id_page(sigfox_id):
-    rows = database.retrieve_messages_by_sigfox_id(sigfox_id)
+    rows = database.retrieve_message_by_sigfox_id(sigfox_id)
     messages = []
     for row in rows:
         message = database_parser.convert_to_message(row)
