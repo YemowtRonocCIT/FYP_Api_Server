@@ -120,8 +120,7 @@ class PostgresInteraction(PostgresInterface):
         FROM messages AS m, node, sensor AS s
         WHERE m.node_id = node.node_id
         AND node.node_id = s.node_id
-        ORDER BY m.time_added DESC
-        LIMIT 1;
+        ORDER BY m.time_added ASC;
         """
         rows = self.select(sql)
         return rows
