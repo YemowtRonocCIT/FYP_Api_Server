@@ -11,7 +11,7 @@ database = PostgresInteraction(DB_NAME, DB_USER, DB_PASSWORD, HOST)
 database_parser = DatabaseParser()
 
 NODE_SUFFIX = '/node/'
-MESSAGE_SUFFIX = '/message/'
+LAST_MESSAGE_SUFFIX = '/last_message/'
 SIGFOX_ID = '<sigfox_id>/'
 
 @app.route('/', methods=['GET'])
@@ -28,7 +28,7 @@ def nodes_page():
 
     return jsonify(nodes)
 
-@app.route(MESSAGE_SUFFIX, methods=['GET'])
+@app.route(LAST_MESSAGE_SUFFIX, methods=['GET'])
 def messages_page():
     rows = database.retrieve_all_messages()
     messages = []
@@ -38,7 +38,7 @@ def messages_page():
     
     return jsonify(messages)
 
-@app.route(MESSAGE_SUFFIX + SIGFOX_ID, methods=['GET'])
+@app.route(LAST_MESSAGE_SUFFIX + SIGFOX_ID, methods=['GET'])
 def messages_by_sigfox_id_page(sigfox_id):
     rows = database.retrieve_message_by_sigfox_id(sigfox_id)
     messages = []
