@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import jsonify
+from flask import request
 from buoy_api.postgres_interaction import PostgresInteraction
 from buoy_api.node import Node
 from buoy_api.message import Message
@@ -14,6 +15,8 @@ NODE_SUFFIX = '/node/'
 LAST_MESSAGE_SUFFIX = '/last_message/'
 SIGFOX_ID = '<sigfox_id>/'
 
+SIGFOX_ID_KEY = 'sigfox_id'
+
 @app.route('/', methods=['GET'])
 def index_page():
     return "Hello World"
@@ -27,6 +30,16 @@ def nodes_page():
         nodes.append(node)
 
     return jsonify(nodes)
+
+@app.route(NODE_SUFFIX, methods=['POST'])
+def add_nodes():
+    value = "False"
+    sigfox_id = request.form.get(SIGFOX_ID_KEY)
+    if sigfox_id is not None:
+        if database.add_node(sigfox_id, True):
+            value = "True"
+    
+    return value
 
 @app.route(LAST_MESSAGE_SUFFIX, methods=['GET'])
 def messages_page():
