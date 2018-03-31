@@ -87,7 +87,7 @@ class PostgresInteraction(PostgresInterface):
         rows = self.select(sql, data)
         return rows
 
-    def add_message(self, node_id, button_pressed, temperature_sensed, 
+    def add_latest_message(self, node_id, button_pressed, temperature_sensed, 
                                 vibration_sensed, temperature, vibration):
         """
         Adds message details to database. The details of each sensor are 
@@ -117,7 +117,7 @@ class PostgresInteraction(PostgresInterface):
         else:
             return False
 
-    def retrieve_all_messages(self):
+    def retrieve_all_latest_messages(self):
         """
         Retrieves all messages from the database
         """
@@ -131,7 +131,7 @@ class PostgresInteraction(PostgresInterface):
         rows = self.select(sql)
         return rows
 
-    def retrieve_message_by_sigfox_id(self, sigfox_id):
+    def retrieve_latest_message_by_sigfox_id(self, sigfox_id):
         """
         Retrieves all messages from the database that are linked to the given
         sigfox_id

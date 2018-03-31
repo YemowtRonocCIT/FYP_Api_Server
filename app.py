@@ -30,7 +30,7 @@ def nodes_page():
 
 @app.route(LAST_MESSAGE_SUFFIX, methods=['GET'])
 def messages_page():
-    rows = database.retrieve_all_messages()
+    rows = database.retrieve_all_latest_messages()
     messages = []
     for row in rows:
         message = database_parser.convert_to_message(row)
@@ -40,7 +40,7 @@ def messages_page():
 
 @app.route(LAST_MESSAGE_SUFFIX + SIGFOX_ID, methods=['GET'])
 def messages_by_sigfox_id_page(sigfox_id):
-    rows = database.retrieve_message_by_sigfox_id(sigfox_id)
+    rows = database.retrieve_latest_message_by_sigfox_id(sigfox_id)
     messages = []
     for row in rows:
         message = database_parser.convert_to_message(row)
