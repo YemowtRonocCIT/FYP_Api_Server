@@ -1,4 +1,4 @@
-from buoy_api.postgres_interface import PostgresInterface
+from buoy_api.database.postgres_interface import PostgresInterface
 
 class PostgresInteraction(PostgresInterface):
 

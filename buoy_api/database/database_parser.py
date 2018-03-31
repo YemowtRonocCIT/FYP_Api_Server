@@ -1,7 +1,7 @@
-from buoy_api.message import Message
-from buoy_api.node import Node
-from buoy_api.location import Location
-from buoy_api.buoy import Buoy
+from buoy_api.json_model.message import Message
+from buoy_api.json_model.node import Node
+from buoy_api.json_model.location import Location
+from buoy_api.json_model.buoy import Buoy
 
 class DatabaseParser(object):
     """

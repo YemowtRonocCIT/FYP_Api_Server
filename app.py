@@ -1,10 +1,8 @@
 from flask import Flask
 from flask import jsonify
 from flask import request
-from buoy_api.postgres_interaction import PostgresInteraction
-from buoy_api.node import Node
-from buoy_api.message import Message
-from buoy_api.database_parser import DatabaseParser
+from buoy_api.database.postgres_interaction import PostgresInteraction
+from buoy_api.database.database_parser import DatabaseParser
 from login_details import DB_USER, DB_NAME, DB_PASSWORD, HOST
 
 app = Flask(__name__)
