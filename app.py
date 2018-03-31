@@ -18,6 +18,9 @@ SIGFOX_ID = '<sigfox_id>/'
 
 SIGFOX_ID_KEY = 'sigfox_id'
 
+LOCATION_NAME_KEY = 'location_name'
+LOCATION_TYPE_KEY = 'location_type'
+
 @app.route('/', methods=['GET'])
 def index_page():
     return "Hello World"
@@ -51,6 +54,18 @@ def locations():
         locations.append(location)
 
     return jsonify(locations)
+
+@app.route(LOCATION_SUFFIX, methods=['POST'])
+def add_location():
+    value = "False"
+    location_name = request.form.get(LOCATION_NAME_KEY)
+    location_type = request.form.get(LOCATION_TYPE_KEY)
+
+    if location_name is not None and location_type is not None:
+        if database.add_location(location_name, location_type):
+            value = "True"
+        
+    return value
 
 @app.route(LAST_MESSAGE_SUFFIX, methods=['GET'])
 def messages_page():

@@ -156,3 +156,19 @@ class PostgresInteraction(PostgresInterface):
         """
         rows = self.select(sql)
         return rows
+
+    def add_location(self, location_name, location_type):
+        """
+        Adds location to database using the given parameters
+
+        location_name (str): Name of the location
+        location_type (str): Type of location (Urban, rural, etc.) 
+        """
+        sql = """INSERT INTO location (location_id, location_name, location_type)
+        VALUES (default, %s, %s)
+        """
+        data = (location_name, location_type)
+        if self.execute(sql, data):
+            return True
+        else:
+            return False
