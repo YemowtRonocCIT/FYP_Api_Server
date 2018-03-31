@@ -14,6 +14,8 @@ database_parser = DatabaseParser()
 NODE_SUFFIX = '/node/'
 LAST_MESSAGE_SUFFIX = '/last_message/'
 LOCATION_SUFFIX = '/location/'
+BUOY_SUFFIX = '/buoy/'
+
 SIGFOX_ID = '<sigfox_id>/'
 
 SIGFOX_ID_KEY = 'sigfox_id'
@@ -66,6 +68,16 @@ def add_location():
             value = "True"
         
     return value
+
+@app.route(BUOY_SUFFIX, methods=['GET'])
+def get_buoys():
+    rows = database.retrieve_all_buoys()
+    buoys = []
+    for row in rows:
+        buoy = database_parser.convert_to_buoy(row)
+        buoys.append(buoy)
+
+    return jsonify(buoys)
 
 @app.route(LAST_MESSAGE_SUFFIX, methods=['GET'])
 def messages_page():

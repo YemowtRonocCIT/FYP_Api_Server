@@ -172,3 +172,12 @@ class PostgresInteraction(PostgresInterface):
             return True
         else:
             return False
+
+    def retrieve_all_buoys(self):
+        """
+        Retrieve all buoys from the database
+        """
+        sql = """SELECT buoy_id, at_location, time_checked
+        FROM buoy"""
+        rows = self.select(sql)
+        return rows
