@@ -146,24 +146,3 @@ class PostgresInteraction(PostgresInterface):
         data = (sigfox_id, )
         rows = self.select(sql, data)
         return rows
-
-    def add_sensor_update(self, node_id, temperature_sensed, vibration_sensed):
-        """
-        Updates sensor table with latest message detection from node with 
-        specified ID
-
-        node_id (str): ID of node from database
-        temperature_sensed (bool): True if temperature sensor working
-        vibration_sensed (bool): True if vibration sensor working
-        """
-        sql = """INSERT INTO sensor (node_id, temperature_sensed, vibration_sensed)
-        VALUES (%s, %s, %s)
-        ON CONFLICT (node_id) DO UPDATE
-        SET temperature_sensed = %s,
-            vibration_sensed = %s"""
-        data = (node_id, temperature_sensed, vibration_sensed, temperature_sensed, vibration_sensed)
-
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
