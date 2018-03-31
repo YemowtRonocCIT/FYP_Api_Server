@@ -13,6 +13,7 @@ database_parser = DatabaseParser()
 
 NODE_SUFFIX = '/node/'
 LAST_MESSAGE_SUFFIX = '/last_message/'
+LOCATION_SUFFIX = '/location/'
 SIGFOX_ID = '<sigfox_id>/'
 
 SIGFOX_ID_KEY = 'sigfox_id'
@@ -40,6 +41,16 @@ def add_nodes():
             value = "True"
     
     return value
+
+@app.route(LOCATION_SUFFIX, methods=['GET'])
+def locations():
+    rows = database.retrieve_all_locations()
+    locations = []
+    for row in rows:
+        location = database_parser.convert_to_location(row)
+        locations.append(location)
+
+    return jsonify(locations)
 
 @app.route(LAST_MESSAGE_SUFFIX, methods=['GET'])
 def messages_page():

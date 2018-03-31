@@ -1,5 +1,6 @@
 from buoy_api.message import Message
 from buoy_api.node import Node
+from buoy_api.location import Location
 
 class DatabaseParser(object):
     """
@@ -40,3 +41,17 @@ class DatabaseParser(object):
         node = Node(row[NODE_ID_INDEX], row[SIGFOX_ID_INDEX], row[ACTIVE_INDEX])
 
         return node
+
+    def convert_to_location(self, row):
+        """
+        Convert a row from a location response to the location domain class.
+
+        row: Single row returned from SELECT
+        """
+        ID_INDEX = 0
+        NAME_INDEX = 1
+        TYPE_INDEX = 2
+
+        location = Location(row[ID_INDEX], row[NAME_INDEX], row[TYPE_INDEX])
+
+        return location

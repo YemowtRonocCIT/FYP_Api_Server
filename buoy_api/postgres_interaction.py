@@ -146,3 +146,13 @@ class PostgresInteraction(PostgresInterface):
         data = (sigfox_id, )
         rows = self.select(sql, data)
         return rows
+
+    def retrieve_all_locations(self):
+        """
+        Retrieves all locations from the database
+        """
+        sql = """SELECT location_id, location_name, location_type
+        FROM location;
+        """
+        rows = self.select(sql)
+        return rows
