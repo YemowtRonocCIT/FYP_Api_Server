@@ -87,7 +87,8 @@ class PostgresInteraction(PostgresInterface):
         rows = self.select(sql, data)
         return rows
 
-    def add_message(self, node_id, button_pressed, temperature, vibration):
+    def add_message(self, node_id, button_pressed, temperature_sensed, 
+                                vibration_sensed, temperature, vibration):
         """
         Adds message details to database. The details of each sensor are 
         decoded before being inserted into the database.
@@ -97,14 +98,20 @@ class PostgresInteraction(PostgresInterface):
         temperature (character): Encoded character value to be converted
         vibration (character): Encoded character value to be converted
         """
-        sql = """INSERT INTO messages(message_id, node_id, button_pressed, temperature, vibration, time_added) 
-        VALUES (default, %s, %s, %s, %s, time.now())
+        sql = """INSERT INTO last_message(node_id, button_press, 
+            temp_sensed, vib_sensed, temperature, vibration, 
+            time_entered) 
+        VALUES (%s, %s, %s, %s, %s, %s, time.now())
         ON CONFLICT (node_id) DO UPDATE
-        SET button_pressed = %s,
+        SET button_press = %s,
+            temp_sensed = %s,
+            vib_sensed = %s,
             temperature = %s,
-            vibration = %s"""
+            vibration = %s
+            time_entered = time.now()"""
         data = (node_id, button_pressed, temperature, vibration,
-                button_pressed, temperature, vibration)
+                button_pressed, temperature, vibration, button_pressed, 
+                temperature, vibration, button_pressed, temperature, vibration)
         if self.execute(sql, data):
             return True
         else:
@@ -114,13 +121,12 @@ class PostgresInteraction(PostgresInterface):
         """
         Retrieves all messages from the database
         """
-        sql = """SELECT m.message_id, m.node_id, m.button_pressed, 
-            m.temperature, m.vibration, s.temperature_sensed, 
-            s.vibration_sensed, m.time_added
-        FROM messages AS m, node, sensor AS s
+        sql = """SELECT m.node_id, m.button_press, 
+            m.temperature, m.vibration, m.temp_sensed, 
+            m.vib_sensed, m.time_entered
+        FROM last_message AS m, node
         WHERE m.node_id = node.node_id
-        AND node.node_id = s.node_id
-        ORDER BY m.time_added ASC;
+        ORDER BY m.time_entered ASC;
         """
         rows = self.select(sql)
         return rows
@@ -132,12 +138,10 @@ class PostgresInteraction(PostgresInterface):
 
         sigfox_id (str): ID as given by sigfox
         """
-        sql = """SELECT m.message_id, m.node_id, 
-            m.button_pressed, m.temperature, m.vibration, s.temperature_sensed,
-            s.vibration_sensed, m.time_added
-        FROM messages AS m, node, sensor AS s
+        sql = """SELECT m.node_id, m.button_press, m.temperature, m.vibration, 
+            m.temp_sensed, m.vib_sensed, m.time_entered
+        FROM last_message AS m, node
         WHERE m.node_id = node.node_id
-        AND node.node_id = s.node_id
         AND node.sigfox_id = %s"""
         data = (sigfox_id, )
         rows = self.select(sql, data)
