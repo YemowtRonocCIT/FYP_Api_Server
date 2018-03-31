@@ -21,6 +21,8 @@ SIGFOX_ID_KEY = 'sigfox_id'
 LOCATION_NAME_KEY = 'location_name'
 LOCATION_TYPE_KEY = 'location_type'
 
+BUOY_THERE_KEY = 'is_there'
+
 @app.route('/', methods=['GET'])
 def index_page():
     return "Hello World"
@@ -68,6 +70,18 @@ def get_buoys():
         buoys.append(buoy)
 
     return jsonify(buoys)
+
+@app.route(BUOY_SUFFIX, methods=['POST'])
+def add_buoy():
+    value = "Not added"
+    is_there = request.form.get(BUOY_THERE_KEY)
+
+    if is_there is not None:
+        if database.add_buoy(is_there):
+            value = "Added Buoy"
+    
+    return value
+        
 
 @app.route(LAST_MESSAGE_SUFFIX, methods=['GET'])
 def messages_page():

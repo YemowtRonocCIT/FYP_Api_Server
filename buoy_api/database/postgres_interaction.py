@@ -181,3 +181,17 @@ class PostgresInteraction(PostgresInterface):
         FROM buoy"""
         rows = self.select(sql)
         return rows
+
+    def add_buoy(self, is_there):
+        """
+        Adds a buoy to the database with the given parameters
+
+        is_there (bool): Indicates if a buoy is on location
+        """
+        sql = """INSERT INTO buoy (buoy_id, at_location, time_checked)
+        VALUES (default, %s, current_timestamp)"""
+        data = (is_there, )
+        if self.execute(sql, data):
+            return True
+        else:
+            return False
