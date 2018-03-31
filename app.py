@@ -39,9 +39,13 @@ def nodes_page():
 
 @app.route(NODE_SUFFIX, methods=['POST'])
 def add_nodes():
+    value = "False"
     sigfox_id = request.form.get(SIGFOX_ID_KEY)
     if sigfox_id is not None:
-        database.add_node(sigfox_id, True)
+        if database.add_node(sigfox_id, True):
+            value = "True"
+    
+    return value
 
 @app.route(LOCATION_SUFFIX, methods=['GET'])
 def locations():
@@ -55,11 +59,15 @@ def locations():
 
 @app.route(LOCATION_SUFFIX, methods=['POST'])
 def add_location():
+    value = "False"
     location_name = request.form.get(LOCATION_NAME_KEY)
     location_type = request.form.get(LOCATION_TYPE_KEY)
 
     if location_name is not None and location_type is not None:
-        database.add_location(location_name, location_type)
+        if database.add_location(location_name, location_type):
+            value = "True"
+        
+    return value
 
 @app.route(BUOY_SUFFIX, methods=['GET'])
 def get_buoys():
