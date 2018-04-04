@@ -204,3 +204,16 @@ class PostgresInteraction(PostgresInterface):
         FROM message"""
         rows = self.select(sql)
         return rows
+
+    def retrieve_messages_by_node_id(self, node_id):
+        """
+        Retrieve all messages from the database sent by the given node
+
+        node_id (str): ID of node as given by the database
+        """
+        sql = """SELECT node_id, message_text, time_sent
+        FROM message
+        WHERE node_id = %s"""
+        data = (node_id, )
+        rows = self.select(sql,data)
+        return rows
