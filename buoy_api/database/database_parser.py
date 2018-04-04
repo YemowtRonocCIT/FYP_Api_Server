@@ -1,4 +1,4 @@
-from buoy_api.json_model.message import LatestMessage
+from buoy_api.json_model.message import LatestMessage, Message
 from buoy_api.json_model.node import Node
 from buoy_api.json_model.location import Location
 from buoy_api.json_model.buoy import Buoy
@@ -70,3 +70,17 @@ class DatabaseParser(object):
         buoy = Buoy(row[ID_INDEX], row[IS_THERE_INDEX], row[TIME_INDEX])
         
         return buoy
+
+    def convert_to_message(self, row):
+        """
+        Convert a row from a message response to the message domain class.
+
+        row: Single row returned from SELECT
+        """
+        NODE_ID_INDEX = 0
+        MESSAGE_INDEX = 1
+        TIME_INDEX = 2
+
+        message = Message(row[NODE_ID_INDEX], row[MESSAGE_INDEX], row[TIME_INDEX])
+
+        return message

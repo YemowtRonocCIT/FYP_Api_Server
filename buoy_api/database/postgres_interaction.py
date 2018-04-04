@@ -195,3 +195,12 @@ class PostgresInteraction(PostgresInterface):
             return True
         else:
             return False
+
+    def retrieve_all_messages(self):
+        """
+        Retrieves all the messages from each node that are in the database
+        """
+        sql = """SELECT node_id, message_text, time_sent
+        FROM message"""
+        rows = self.select(sql)
+        return rows
