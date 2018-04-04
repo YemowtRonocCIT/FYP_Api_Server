@@ -1,4 +1,4 @@
-from buoy_api.json_model.message import Message
+from buoy_api.json_model.message import LatestMessage
 from buoy_api.json_model.node import Node
 from buoy_api.json_model.location import Location
 from buoy_api.json_model.buoy import Buoy
@@ -9,7 +9,7 @@ class DatabaseParser(object):
     the domain level classes that will be used by the program.
     """
 
-    def convert_to_message(self, row):
+    def convert_to_latest_message(self, row):
         """
         Convert a row from a messages response to the Message domain class.
 
@@ -23,7 +23,7 @@ class DatabaseParser(object):
         VIBRATION_SENSED_INDEX = 5
         TIME_INDEX = 6
 
-        message = Message(row[BUTTON_PRESSED_INDEX], row[TEMPERATURE_SENSED_INDEX],
+        message = LatestMessage(row[BUTTON_PRESSED_INDEX], row[TEMPERATURE_SENSED_INDEX],
             row[VIBRATION_SENSED_INDEX], row[TEMPERATURE_INDEX], 
             row[VIBRATION_INDEX], row[NODE_ID_INDEX], row[TIME_INDEX])
 

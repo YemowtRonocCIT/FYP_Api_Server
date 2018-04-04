@@ -1,4 +1,4 @@
-class Message(dict):
+class LatestMessage(dict):
 
     def __init__(self, button_pressed, temp_sensed, vibration_sensed,
                                     temp_value, vibration_value, node_id, time):
