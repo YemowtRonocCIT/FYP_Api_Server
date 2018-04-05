@@ -3,6 +3,7 @@ from flask import jsonify
 from flask import request
 from buoy_api.database.postgres_interaction import PostgresInteraction
 from buoy_api.database.database_parser import DatabaseParser
+from buoy_api.website_input.buoy_input import BuoyInput
 from login_details import DB_USER, DB_NAME, DB_PASSWORD, HOST
 
 app = Flask(__name__)
@@ -23,7 +24,7 @@ SIGFOX_ID_KEY = 'sigfox_id'
 LOCATION_NAME_KEY = 'location_name'
 LOCATION_TYPE_KEY = 'location_type'
 
-BUOY_THERE_KEY = 'is_there'
+BUOY_THERE_KEY = 'at_location'
 
 @app.route('/', methods=['GET'])
 def index_page():
@@ -105,8 +106,10 @@ def get_buoys():
 def add_buoy():
     value = "Not added"
     is_there = request.form.get(BUOY_THERE_KEY)
+    buoy_input = BuoyInput()
 
     if is_there is not None:
+        is_there = buoy_input.convert_yes_no_boolean(is_there)
         if database.add_buoy(is_there):
             value = "Added Buoy"
     
