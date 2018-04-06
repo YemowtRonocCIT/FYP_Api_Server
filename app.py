@@ -110,7 +110,6 @@ def get_buoys():
 @app.route(BUOY_SUFFIX, methods=['POST'])
 def add_buoy():
     value = "Not added"
-    print(request.form)
     is_there = request.form.get(BUOY_THERE_KEY)
     buoy_input = BuoyInput()
 
