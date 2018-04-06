@@ -11,7 +11,7 @@ class DatabaseParser(object):
 
     def convert_to_latest_message(self, row):
         """
-        Convert a row from a messages response to the Message domain class.
+        Convert a row from a latest message response to the LatestMessage domain class.
 
         row: Single row returned from SELECT
         """
