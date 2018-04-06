@@ -20,6 +20,7 @@ SIGFOX_ID = '<sigfox_id>/'
 NODE_ID = '<node_id>/'
 
 SIGFOX_ID_KEY = 'sigfox_id'
+BUOY_ID_KEY = 'buoy_id'
 
 LOCATION_NAME_KEY = 'location_name'
 LOCATION_TYPE_KEY = 'location_type'
@@ -49,9 +50,14 @@ def nodes_page():
 def add_nodes():
     value = "False"
     sigfox_id = request.form.get(SIGFOX_ID_KEY)
-    if sigfox_id is not None:
+    buoy_id = request.form.get(BUOY_ID_KEY)
+    if sigfox_id is not None and buoy_id is not None:
         if database.add_node(sigfox_id, True):
             value = "True"
+        
+        node_id = database.retrieve_latest_node_id()
+        if database.add_buoy_node_connection(node_id, buoy_id):
+            value += "Add buoy/node connection"
     
     return value
 

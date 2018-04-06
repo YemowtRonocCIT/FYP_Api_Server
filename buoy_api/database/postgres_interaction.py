@@ -87,6 +87,19 @@ class PostgresInteraction(PostgresInterface):
         rows = self.select(sql, data)
         return rows
 
+    def retrieve_latest_node_id(self):
+        """
+        Retrieves the latest node_id which was added to the system. This
+        can be used to find the most recently added node.
+        """
+        sql = """SELECT MAX(node_id)
+        FROM node"""
+        rows = self.select(sql)
+        for row in rows:
+            node_id = row[0]
+        
+        return node_id
+
     def add_latest_message(self, node_id, button_pressed, temperature_sensed, 
                                 vibration_sensed, temperature, vibration):
         """
@@ -265,6 +278,22 @@ class PostgresInteraction(PostgresInterface):
             longitude = %s"""
         data = (location_id, buoy_id, latitude, longitude, location_id, 
                                                     latitude, longitude)
+        if self.execute(sql, data):
+            return True
+        else:
+            return False
+    
+    def add_buoy_node_connection(self, node_id, buoy_id):
+        """
+        Adds relationship between a node and a buoy to the database.
+
+        node_id (int): Integer ID to point to a given node in the database
+        buoy_id (int): Integer ID to point to a given buoy in the database
+        """
+        sql = """INSERT INTO node_buoy (node_id, buoy_id)
+        VALUES (%s, %s)"""
+        data = (node_id, buoy_id)
+
         if self.execute(sql, data):
             return True
         else:
