@@ -3,6 +3,11 @@ from decimal import Decimal
 class BuoyInput(object):
 
     def convert_yes_no_boolean(self, text):
+        """
+        Converts input from the website of yes/no to True/False as boolean
+
+        text (str): Text input received from the form
+        """
         answer = None
         if text.lower() == 'yes':
             answer = True
