@@ -157,6 +157,19 @@ class PostgresInteraction(PostgresInterface):
         rows = self.select(sql)
         return rows
 
+    def retrieve_location_by_name(self, name):
+        """
+        Retrieves locations from database with the matching name parameter
+
+        name (str): Name of the location
+        """
+        sql = """SELECT location_id, location_name, location_type
+        FROM location
+        WHERE location_name = %s"""
+        data = (name, )
+        rows = self.select(sql, data)
+        return rows
+
     def add_location(self, location_name, location_type):
         """
         Adds location to database using the given parameters
@@ -217,3 +230,37 @@ class PostgresInteraction(PostgresInterface):
         data = (node_id, )
         rows = self.select(sql,data)
         return rows
+
+    def get_latest_buoy_id(self):
+        """
+        Retrieves latest added ID for a buoy from the database.
+        """
+        sql = """SELECT MAX(buoy_id)
+        FROM buoy"""
+        rows = self.select(sql)
+        for row in rows:
+            return row[0]
+
+
+    def add_buoy_location(self, location_id, latitude, longitude, buoy_id):
+        """
+        Adds the relation between a buoy and a location to the buoy_location
+        table
+
+        location_id (int): Given location ID by database
+        latitude (float): Latitude of buoy location
+        longitude (float): Longitude of buoy location
+        buoy_id (int): ID of buoy as given by the database
+        """
+        sql = """INSERT INTO buoy_location (location_id, buoy_id, latitude, longitude)
+        VALUES (%s, %s, %s, %s)
+        ON CONFLICT (buoy_id) DO UPDATE
+        SET location_id = %s,
+            latitude = %s,
+            longitude = %s"""
+        data = (location_id, buoy_id, latitude, longitude, location_id, 
+                                                    latitude, longitude)
+        if self.execute(sql, data):
+            return True
+        else:
+            return False

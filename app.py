@@ -26,6 +26,11 @@ LOCATION_TYPE_KEY = 'location_type'
 
 BUOY_THERE_KEY = 'at_location'
 
+LATITUDE_KEY = 'latitude'
+LONGITUDE_KEY = 'longitude'
+BUOY_LOCATION_KEY = 'buoy_location'
+LOCATION_ID_KEY = 'location_id'
+
 @app.route('/', methods=['GET'])
 def index_page():
     return "Hello World"
@@ -105,13 +110,34 @@ def get_buoys():
 @app.route(BUOY_SUFFIX, methods=['POST'])
 def add_buoy():
     value = "Not added"
+    print(request.form)
     is_there = request.form.get(BUOY_THERE_KEY)
     buoy_input = BuoyInput()
 
-    if is_there is not None:
-        is_there = buoy_input.convert_yes_no_boolean(is_there)
-        if database.add_buoy(is_there):
-            value = "Added Buoy"
+    is_there = buoy_input.convert_yes_no_boolean(is_there)
+    
+    latitude = request.form.get(LATITUDE_KEY)
+    latitude = buoy_input.convert_to_coordinate(latitude)
+
+    longitude = request.form.get(LONGITUDE_KEY)
+    longitude = buoy_input.convert_to_coordinate(longitude)
+
+    location_name = request.form.get(BUOY_LOCATION_KEY)
+
+    if (location_name is not None) and (is_there is not None) and \
+        (latitude is not None) and (longitude is not None):
+        rows = database.retrieve_location_by_name(location_name)
+        for row in rows:
+            location = database_parser.convert_to_location(row)
+            location_id = location[LOCATION_ID_KEY]    
+
+        if is_there is not None:
+            if database.add_buoy(is_there):
+                value = "Added Buoy"
+
+        buoy_id = database.get_latest_buoy_id()    
+        if database.add_buoy_location(location_id, latitude, longitude, buoy_id):
+            value += "Added buoy location"
     
     return value
         
