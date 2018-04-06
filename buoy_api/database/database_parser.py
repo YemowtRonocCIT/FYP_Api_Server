@@ -66,8 +66,12 @@ class DatabaseParser(object):
         ID_INDEX = 0
         IS_THERE_INDEX = 1
         TIME_INDEX = 2
+        LOCATION_NAME_INDEX = 3
+        LATITUDE_INDEX = 4
+        LONGITUDE_INDEX = 5
 
-        buoy = Buoy(row[ID_INDEX], row[IS_THERE_INDEX], row[TIME_INDEX])
+        buoy = Buoy(row[ID_INDEX], row[IS_THERE_INDEX], row[TIME_INDEX], 
+            row[LOCATION_NAME_INDEX], row[LATITUDE_INDEX], row[LONGITUDE_INDEX])
         
         return buoy
 

@@ -188,10 +188,15 @@ class PostgresInteraction(PostgresInterface):
 
     def retrieve_all_buoys(self):
         """
-        Retrieve all buoys from the database
+        Retrieve all buoys from the database. This will also retrieve the 
+        name of the location where it is along with the GPS co ordinates of 
+        the exact location of the buoy.
         """
-        sql = """SELECT buoy_id, at_location, time_checked
-        FROM buoy"""
+        sql = """SELECT b.buoy_id, b.at_location, b.time_checked, l.location_name, 
+            bl.latitude, bl.longitude
+        FROM buoy AS b, location AS l, buoy_location AS bl
+        WHERE b.buoy_id = bl.buoy_id
+        AND bl.location_id = l.location_id"""
         rows = self.select(sql)
         return rows
 
