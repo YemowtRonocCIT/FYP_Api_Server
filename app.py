@@ -18,6 +18,7 @@ BUOY_SUFFIX = '/buoy/'
 
 SIGFOX_ID = '<sigfox_id>/'
 NODE_ID = '<node_id>/'
+LOCATION_ID = '<location_id>/'
 
 SIGFOX_ID_KEY = 'sigfox_id'
 BUOY_ID_KEY = 'buoy_id'
@@ -168,5 +169,17 @@ def messages_by_sigfox_id_page(sigfox_id):
 
     return jsonify(messages)
 
+
+@app.route(BUOY_SUFFIX + LOCATION_ID, methods=['GET'])
+def buoys_by_location_id(location_id):
+    rows = database.retrieve_buoys_by_location_id(location_id)
+    buoys = []
+    for row in rows:
+        buoy = database_parser.convert_to_buoy(row)
+        buoys.append(buoy)
+
+    return jsonify(buoys)
+        
+        
 if __name__ == '__main__':
     app.run()

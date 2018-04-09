@@ -227,6 +227,22 @@ class PostgresInteraction(PostgresInterface):
         else:
             return False
 
+    def retrieve_buoys_by_location_id(self, location_id):
+        """
+        Retrieves all buoys that are connected to the given location ID
+
+        location_id (int): ID given to the location by the database
+        """
+        sql = """SELECT buoy.buoy_id, at_location, time_checked, l.location_name,
+            bl.latitude, bl.longitude
+        FROM buoy, buoy_location AS bl, location AS l
+        WHERE bl.location_id = %s
+        AND buoy.buoy_id = bl.buoy_id
+        AND bl.location_id = l.location_id"""
+        data = (location_id, )
+        rows = self.select(sql, data)
+        return rows
+
     def retrieve_all_messages(self):
         """
         Retrieves all the messages from each node that are in the database
