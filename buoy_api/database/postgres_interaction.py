@@ -227,6 +227,35 @@ class PostgresInteraction(PostgresInterface):
         else:
             return False
 
+    def remove_buoy_by_id(self, buoy_id):
+        """
+        Removes buoy with given buoy ID from the database
+
+        buoy_id (int): ID of buoy to be deleted
+        """
+        working = True
+        sql = """DELETE FROM buoy
+        WHERE buoy_id = %s"""
+        data = (buoy_id, )
+        if not self.execute(sql, data):
+            working = False
+        
+        sql = """DELETE FROM buoy_location
+        WHERE buoy_id = %s"""
+        if working == True:
+            if not self.execute(sql, data):
+                working = False
+
+        sql = """DELETE FROM node_buoy
+        WHERE buoy_id = %s"""
+        if working == True:
+            if not self.execute(sql, data):
+                working = False
+
+        return working
+
+
+
     def retrieve_buoys_by_location_id(self, location_id):
         """
         Retrieves all buoys that are connected to the given location ID

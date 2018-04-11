@@ -19,6 +19,7 @@ BUOY_SUFFIX = '/buoy/'
 SIGFOX_ID = '<sigfox_id>/'
 NODE_ID = '<node_id>/'
 LOCATION_ID = '<location_id>/'
+BUOY_ID = '<buoy_id>/'
 
 SIGFOX_ID_KEY = 'sigfox_id'
 BUOY_ID_KEY = 'buoy_id'
@@ -147,7 +148,14 @@ def add_buoy():
             value += "Added buoy location"
     
     return value
-        
+
+@app.route(BUOY_SUFFIX + BUOY_ID, methods=['DELETE'])
+def remove_node(buoy_id):
+    result = "Not Deleted"
+    if database.remove_buoy_by_id(buoy_id):
+        result = "Deleted"
+    
+    return result        
 
 @app.route(LAST_MESSAGE_SUFFIX, methods=['GET'])
 def messages_page():
