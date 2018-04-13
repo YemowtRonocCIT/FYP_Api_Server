@@ -254,8 +254,6 @@ class PostgresInteraction(PostgresInterface):
 
         return working
 
-
-
     def retrieve_buoys_by_location_id(self, location_id):
         """
         Retrieves all buoys that are connected to the given location ID
@@ -303,7 +301,6 @@ class PostgresInteraction(PostgresInterface):
         rows = self.select(sql)
         for row in rows:
             return row[0]
-
 
     def add_buoy_location(self, location_id, latitude, longitude, buoy_id):
         """
