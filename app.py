@@ -105,6 +105,14 @@ def add_location():
         
     return value
 
+@app.route(LOCATION_SUFFIX + LOCATION_ID, methods=['DELETE'])
+def remove_location(location_id):
+    value = "Nothing removed"
+    if database.remove_location(location_id):
+        value = "Removed location"
+    
+    return value
+
 @app.route(MESSAGE_SUFFIX, methods=['GET'])
 def messages():
     rows = database.retrieve_all_messages()

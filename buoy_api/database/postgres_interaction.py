@@ -198,6 +198,20 @@ class PostgresInteraction(PostgresInterface):
             return True
         else:
             return False
+        
+    def remove_location(self, location_id):
+        """
+        Removes location from database with given location ID
+
+        location_id (int): ID given to location by database
+        """
+        sql = """DELETE FROM location
+        WHERE location_id = %s"""
+        data = (location_id, )
+        if self.execute(sql, data):
+            return True
+        else:
+            return False
 
     def retrieve_all_buoys(self):
         """
