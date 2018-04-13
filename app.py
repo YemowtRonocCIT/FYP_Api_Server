@@ -182,7 +182,15 @@ def remove_buoy(buoy_id):
     if database.remove_buoy_by_id(buoy_id):
         result = "Deleted"
     
-    return result        
+    return result  
+
+@app.route(BUOY_SUFFIX + BUOY_ID, methods=['PATCH'])
+def update_buoy_checked(buoy_id):
+    result = "Not updated"
+    if database.update_buoy_checked(buoy_id):
+        result = "Updated"
+
+    return result      
 
 @app.route(LAST_MESSAGE_SUFFIX, methods=['GET'])
 def messages_page():

@@ -329,6 +329,18 @@ class PostgresInteraction(PostgresInterface):
                 working = False
 
         return working
+    
+    def update_buoy_checked(self, buoy_id):
+        """
+        Updates the latest time checked on buoy with given ID
+
+        buoy_id (int): ID given to buoy by database
+        """
+        sql = """UPDATE buoy
+        SET time_checked = current_timestamp
+        WHERE buoy_id = %s"""
+        data = (buoy_id, )
+        return self.execute(sql, data)
 
     def retrieve_buoys_by_location_id(self, location_id):
         """
