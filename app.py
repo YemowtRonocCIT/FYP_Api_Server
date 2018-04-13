@@ -64,6 +64,15 @@ def add_nodes():
     
     return value
 
+@app.route(NODE_SUFFIX + SIGFOX_ID, methods=['DELETE'])
+def remove_node(sigfox_id):
+    value = "Nothing Removed"
+    if sigfox_id is not None:
+        if database.remove_node(sigfox_id):
+            value = "Removed node"
+        
+    return value
+
 @app.route(LOCATION_SUFFIX, methods=['GET'])
 def locations():
     rows = database.retrieve_all_locations()
@@ -150,7 +159,7 @@ def add_buoy():
     return value
 
 @app.route(BUOY_SUFFIX + BUOY_ID, methods=['DELETE'])
-def remove_node(buoy_id):
+def remove_buoy(buoy_id):
     result = "Not Deleted"
     if database.remove_buoy_by_id(buoy_id):
         result = "Deleted"
