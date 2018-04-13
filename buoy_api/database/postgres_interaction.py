@@ -30,10 +30,7 @@ class PostgresInteraction(PostgresInterface):
         ON CONFLICT (sigfox_id) DO UPDATE
         SET active = %s"""
         data = (sigfox_id, is_active, is_active)
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
+        return self.execute(sql, data)
 
     def set_node_status(self, status, sigfox_id):
         """
@@ -46,10 +43,7 @@ class PostgresInteraction(PostgresInterface):
         SET active = %s
         WHERE sigfox_id = %s"""
         data = (status, sigfox_id)
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
+        return self.execute(sql, data)
 
     def remove_node(self, sigfox_id):
         """
@@ -156,10 +150,7 @@ class PostgresInteraction(PostgresInterface):
         data = (node_id, button_pressed, temperature, vibration,
                 button_pressed, temperature, vibration, button_pressed, 
                 temperature, vibration, button_pressed, temperature, vibration)
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
+        return self.execute(sql, data)
 
     def retrieve_all_latest_messages(self):
         """
@@ -225,10 +216,7 @@ class PostgresInteraction(PostgresInterface):
         VALUES (default, %s, %s)
         """
         data = (location_name, location_type)
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
+        return self.execute(sql, data)
         
     def remove_location(self, location_id):
         """
@@ -285,10 +273,7 @@ class PostgresInteraction(PostgresInterface):
         sql = """INSERT INTO buoy (buoy_id, at_location, time_checked)
         VALUES (default, %s, current_timestamp)"""
         data = (is_there, )
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
+        return self.execute(sql, data)
 
     def remove_buoy_by_id(self, buoy_id):
         """
@@ -408,10 +393,7 @@ class PostgresInteraction(PostgresInterface):
             longitude = %s"""
         data = (location_id, buoy_id, latitude, longitude, location_id, 
                                                     latitude, longitude)
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
+        return self.execute(sql, data)
     
     def add_buoy_node_connection(self, node_id, buoy_id):
         """
@@ -424,7 +406,4 @@ class PostgresInteraction(PostgresInterface):
         VALUES (%s, %s)"""
         data = (node_id, buoy_id)
 
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
+        return self.execute(sql, data)
