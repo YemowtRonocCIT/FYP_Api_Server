@@ -57,13 +57,29 @@ class PostgresInteraction(PostgresInterface):
 
         sigfox_id (str): Given Sigfox ID for the node
         """
+        NODE_ID_INDEX = 0
+
+        value = True
+
+        node_id = None
+        rows = self.retrieve_node_by_sigfox_id(sigfox_id)
+        for row in rows:
+            node_id = row[NODE_ID_INDEX]
+
         sql = """DELETE FROM node
         WHERE sigfox_id = %s;"""
         data = (sigfox_id, )
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
+        if not self.execute(sql, data):
+            value = False
+
+        sql = """DELETE FROM node_buoy
+        WHERE node_id = %s"""
+        data = (node_id, )
+        if value == True and node_id is not None:
+            if not self.execute(sql, data):
+                value = False
+        
+        return value
 
     def retrieve_all_nodes(self):
         """
@@ -84,6 +100,21 @@ class PostgresInteraction(PostgresInterface):
         FROM node
         WHERE sigfox_id = %s"""
         data = (sigfox_id, )
+        rows = self.select(sql, data)
+        return rows
+    
+    def retrieve_node_by_buoy_id(self, buoy_id):
+        """
+        Retrieves specific node from database which is attached to the buoy
+        with the given ID
+
+        buoy_id (int): ID of buoy as given by the database
+        """
+        sql = """SELECT n.node_id, n.sigfox_id, n.active
+        FROM node AS n, node_buoy AS nb
+        WHERE nb.buoy_id = %s
+        AND nb.node_id = n.node_id"""
+        data = (buoy_id, )
         rows = self.select(sql, data)
         return rows
 
@@ -205,13 +236,31 @@ class PostgresInteraction(PostgresInterface):
 
         location_id (int): ID given to location by database
         """
+        BUOY_ID_INDEX = 0
+
+        value = True
+
+        buoy_ids = []
+        rows = self.retrieve_buoys_by_location_id(location_id)
+        for row in rows:
+            buoy_ids.append(row[BUOY_ID_INDEX])
+        
+        for buoy_id in buoy_ids:
+            self.remove_buoy_by_id(buoy_id)
+
         sql = """DELETE FROM location
         WHERE location_id = %s"""
         data = (location_id, )
-        if self.execute(sql, data):
-            return True
-        else:
-            return False
+        if not self.execute(sql, data):
+            value = False
+
+        if value == True:
+            sql = """DELETE FROM buoy_location
+            WHERE location_id = %s"""
+            if not self.execute(sql, data):
+                value = False
+            
+        return value
 
     def retrieve_all_buoys(self):
         """
@@ -247,22 +296,35 @@ class PostgresInteraction(PostgresInterface):
 
         buoy_id (int): ID of buoy to be deleted
         """
+        SIGFOX_ID_INDEX = 1
+
         working = True
-        sql = """DELETE FROM buoy
-        WHERE buoy_id = %s"""
-        data = (buoy_id, )
-        if not self.execute(sql, data):
-            working = False
+
+        sigfox_id = None
+        rows = self.retrieve_node_by_buoy_id(buoy_id)
+        for row in rows:
+            sigfox_id = row[SIGFOX_ID_INDEX]
         
-        sql = """DELETE FROM buoy_location
-        WHERE buoy_id = %s"""
-        if working == True:
-            if not self.execute(sql, data):
+        if sigfox_id is not None:
+            if not self.set_node_status(False, sigfox_id):
                 working = False
 
-        sql = """DELETE FROM node_buoy
-        WHERE buoy_id = %s"""
         if working == True:
+            sql = """DELETE FROM buoy
+            WHERE buoy_id = %s"""
+            data = (buoy_id, )
+            if not self.execute(sql, data):
+                working = False
+        
+        if working == True:
+            sql = """DELETE FROM buoy_location
+            WHERE buoy_id = %s"""
+            if not self.execute(sql, data):
+                working = False
+        
+        if working == True:
+            sql = """DELETE FROM node_buoy
+            WHERE buoy_id = %s"""
             if not self.execute(sql, data):
                 working = False
 
