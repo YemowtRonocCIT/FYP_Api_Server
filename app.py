@@ -73,6 +73,16 @@ def remove_node(sigfox_id):
         
     return value
 
+@app.route(NODE_SUFFIX + SIGFOX_ID, methods=['PATCH'])
+def update_node(sigfox_id):
+    value = "Nothing changed"
+    rows = database.retrieve_node_by_sigfox_id(sigfox_id)
+    for row in rows:
+        node = database_parser.convert_to_node(row)
+    database.set_node_status(not node['active'], sigfox_id)
+    value = "Updated"
+    return value
+
 @app.route(LOCATION_SUFFIX, methods=['GET'])
 def locations():
     rows = database.retrieve_all_locations()
