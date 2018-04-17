@@ -249,6 +249,22 @@ class PostgresInteraction(PostgresInterface):
                 value = False
             
         return value
+    
+    def update_location(self, location_name, location_type, location_id):
+        """
+        Updates the details of the location with the given ID, with the 
+        details passed
+
+        location_name (str): New name for location
+        location_type (str): New type for location
+        location_id (int): ID for the old location details
+        """
+        sql = """UPDATE location
+        SET location_name = %s,
+            location_type = %s
+        WHERE location_id = %s"""
+        data = (location_name, location_type, location_id)
+        return self.execute(sql, data)
 
     def retrieve_all_buoys(self):
         """

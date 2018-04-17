@@ -98,11 +98,16 @@ def add_location():
     value = "False"
     location_name = request.form.get(LOCATION_NAME_KEY)
     location_type = request.form.get(LOCATION_TYPE_KEY)
+    location_id = request.form.get(LOCATION_ID_KEY)
 
     if location_name is not None and location_type is not None:
-        if database.add_location(location_name, location_type):
-            value = "True"
-        
+        if location_id is None:
+            if database.add_location(location_name, location_type):
+                value = "True"
+        else:
+            if database.update_location(location_name, location_type, location_id):
+                value = "True"
+
     return value
 
 @app.route(LOCATION_SUFFIX + LOCATION_ID, methods=['DELETE'])
